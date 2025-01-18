@@ -34,6 +34,6 @@ jobs:
     with:
       environment: test
       artifact-name: my-cool-app
-      artifact-version: ${{  }}
+      artifact-version: ${{ needs.artifact-version.outputs.package }}
     secrets: inherit
 
