@@ -3,7 +3,7 @@ name: 🚀 deploy
 on:
   workflow_call:
     inputs:
-      version:
+      artifact-version:
         required: true
         type: string
       environment:

@@ -46,14 +46,14 @@ jobs:
     uses: ./.github/workflows/rwf_build.yml
     with:
       artifact-name: my-cool-app
-      artifact-version: ''
-      environment: ''
+      artifact-version: ${{ needs.artifact-version.outputs.package }}
+      environment: ${{ inputs.environment }}
     secrets: inherit
 
   deploy:
     uses: ./.github/workflows/rwf_deploy.yml
     with:
-      environment: 'test'
-      version: ''
+      environment: ${{ inputs.environment }}
+      artifact-version: ${{ needs.artifact-version.outputs.package }}
     secrets: inherit
 
