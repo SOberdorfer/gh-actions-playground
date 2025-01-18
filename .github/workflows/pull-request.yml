@@ -1,5 +1,5 @@
-name: 🛠️ Pull request
-run-name: 🤖 ${{ github.actor }} is validating PR for viplive-lab-fe
+name: On-Pull-Request
+run-name: 🤖 ${{ github.actor }} is validating PR
 on:
   push:
     branches:
@@ -26,15 +26,14 @@ jobs:
           if [ -z "$BASE_REF" ]; then
             BASE_REF="$((minutes=$(date +%s)/60))"
           fi
-          echo "📝 Retrieved version: $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "📝 Retrieved version: $ARTIFACT_VERSION" >> $GITHUB_STEP_SUMMARY
           echo "artifact-version=${ARTIFACT_VERSION}-" >> $GITHUB_OUTPUT
 
   artifact-build:
     uses: ./.github/workflows/rwf_build.yml
     with:
       environment: test
-      release-tag: ${{ steps.package.outputs.artifact-version }}
-      artifact-name: ''
-      artifact-version: ''
+      artifact-name: my-cool-app
+      artifact-version: ${{  }}
     secrets: inherit
 

@@ -1,6 +1,11 @@
-name: deploy
-run-name: 🚀 ${{ github.actor }} is deploying ${{ inputs.environment }}
+name: On-Release
+run-name: 🚀 ${{ github.actor }} is releasing ${{ inputs.environment }}
 on:
+  workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
   workflow_dispatch:
     inputs:
       environment:
@@ -9,22 +14,44 @@ on:
         type: environment
         required: true
   push:
-    branches:  [ main ]
+    branches:  [ master ]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
+
+  artifact-version:
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.package.artifact-version }}
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Retrieve Artifact-version from package
+        id: package
+        run: |
+          ARTIFACT_VERSION=$(jq -r '.version' package.json)
+          echo "📝 Retrieved version: $ARTIFACT_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "artifact-version=${ARTIFACT_VERSION}-" >> $GITHUB_OUTPUT
+
+      - name: 📦 Set release tag to repository
+        run: |
+          git tag -a ${{ steps.package.outputs.ARTIFACT_VERSION }} -m "Release ${{ steps.package.outputs.ARTIFACT_VERSION }}"
+          git push origin ${{ steps.package.outputs.ARTIFACT_VERSION }}
+
   build:
+    if: ${{ github.event_name == 'push' }}
     uses: ./.github/workflows/rwf_build.yml
     with:
       artifact-name: my-cool-app
-      artifact-version:
+      artifact-version: ''
       environment: ''
     secrets: inherit
 
@@ -33,8 +60,5 @@ jobs:
     with:
       environment: 'test'
       version: ''
-
     secrets: inherit
-
-
 
