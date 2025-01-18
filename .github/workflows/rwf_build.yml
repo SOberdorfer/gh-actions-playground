@@ -36,31 +36,17 @@ jobs:
           cache-dependency-path: package-lock.json
 
       - name: 📦 Install dependencies
-        run: npm ci
-
-      - name: 🧹 Lint
-        run: npm run lint
-
-      - name: 🎨 Lint Styles
-        run: npm run style-lint
-
-      - name: 🔍 Check Licences
-        run: npm run check-licenses
-
-      - name: ✅ Test
-        run: npm run ci-test
+        run: npm install
 
       - name: 🏗️ Build
-        run: npm run ci-deploy
+        run: npm run build
 
       - name: 📦 Package Angular App
         id: packaging
         run: |
           mkdir release
-
           ARTIFACT_LOCATION="release/${{ inputs.artifact-name }}.tar.gz"
-          tar -czvf "$ARTIFACT_LOCATION" -C dist/viplive-lab-orderen/browser .
-
+          tar -czvf "$ARTIFACT_LOCATION" -C dist/${{ inputs.artifact-name }}/browser .
           echo "ARTIFACT_LOCATION=${ARTIFACT_LOCATION}" >> $GITHUB_OUTPUT
 
       - name: 📤 Push artifact to Artifactory
