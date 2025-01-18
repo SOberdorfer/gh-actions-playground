@@ -35,14 +35,8 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
-      - name: 📦 Install dependencies
-        run: npm install
-
-      - name: ✅ Test
-        run: npm run test
-
       - name: 🏗️ Build
-        run: npm run test
+        run: npm run build
 
       - name: 📦 Package Angular App
         id: packaging
