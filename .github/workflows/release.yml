@@ -41,11 +41,6 @@ jobs:
           echo "📝 Retrieved version: $ARTIFACT_VERSION" >> $GITHUB_STEP_SUMMARY
           echo "artifact-version=${ARTIFACT_VERSION}-" >> $GITHUB_OUTPUT
 
-      - name: 📦 Set release tag to repository
-        run: |
-          git tag -a ${{ steps.package.outputs.ARTIFACT_VERSION }} -m "Release ${{ steps.package.outputs.ARTIFACT_VERSION }}"
-          git push origin ${{ steps.package.outputs.ARTIFACT_VERSION }}
-
   build:
     if: ${{ github.event_name == 'push' }}
     uses: ./.github/workflows/rwf_build.yml

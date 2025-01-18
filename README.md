@@ -26,4 +26,6 @@ The `rwf_deploy` workflow handles the deployment of the built artifact to the sp
 
 To use these workflows, you can manually trigger the `deploy` workflow or push changes to the `main` branch. The workflows will automatically handle the build and deployment processes.
 
+push to main branch
+```bash
 ---
