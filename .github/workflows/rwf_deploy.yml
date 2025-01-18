@@ -1,0 +1,29 @@
+name: 🚀 deploy
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+
+
+jobs:
+  deploy:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: 📦 pull Artifact from artifactory ${{ inputs.environment }}
+        run: echo "Pulled artifact from artifactory >> $GITHUB_SUMMARY"
+
+      - name: 🚀 Deploy artifact to ${{ inputs.environment }} environment
+        run: echo "Version ${{ inputs.version }} >> $GITHUB_SUMMARY"

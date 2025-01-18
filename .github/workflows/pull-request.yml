@@ -1,0 +1,40 @@
+name: 🛠️ Pull request
+run-name: 🤖 ${{ github.actor }} is validating PR for viplive-lab-fe
+on:
+  push:
+    branches:
+      - feature/*
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  artifact-version:
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.package.artifact-version }}
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 📦 Retrieve Artifact-version from package
+        id: package
+        run: |
+          ARTIFACT_VERSION=$(jq -r '.version' package.json)
+          BASE_REF=$(echo "${{ github.base_ref }}" | cut -d'/' -f2-)
+          if [ -z "$BASE_REF" ]; then
+            BASE_REF="$((minutes=$(date +%s)/60))"
+          fi
+          echo "📝 Retrieved version: $VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "artifact-version=${ARTIFACT_VERSION}-" >> $GITHUB_OUTPUT
+
+  artifact-build:
+    uses: ./.github/workflows/rwf_build.yml
+    with:
+      environment: test
+      release-tag: ${{ steps.package.outputs.artifact-version }}
+      artifact-name: ''
+      artifact-version: ''
+    secrets: inherit
+
