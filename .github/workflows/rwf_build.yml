@@ -42,7 +42,7 @@ jobs:
         run: npm run ci-test
 
       - name: 🏗️ Build
-        run: npm run ci-deploy
+        run: npm run test
 
       - name: 📦 Package Angular App
         id: packaging
