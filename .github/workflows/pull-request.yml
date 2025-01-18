@@ -21,11 +21,12 @@ jobs:
       - name: 📦 Retrieve Artifact-version from package
         id: package
         run: |
-          ARTIFACT_VERSION=$(jq -r '.version' package.json)
           BASE_REF=$(echo "${{ github.base_ref }}" | cut -d'/' -f2-)
           if [ -z "$BASE_REF" ]; then
             BASE_REF="$((minutes=$(date +%s)/60))"
           fi
+          ARTIFACT_VERSION=$(jq -r '.version' package.json)-$BASE_REF
+
           echo "📝 Retrieved version: $ARTIFACT_VERSION" >> $GITHUB_STEP_SUMMARY
           echo "artifact-version=${ARTIFACT_VERSION}-" >> $GITHUB_OUTPUT
 
