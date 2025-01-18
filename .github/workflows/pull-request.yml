@@ -34,7 +34,7 @@ jobs:
     uses: ./.github/workflows/rwf_build.yml
     with:
       environment: test
-      artifact-name: my-cool-app
+      artifact-name: gh-actions-playground
       artifact-version: ${{ needs.artifact-version.outputs.package }}
     secrets: inherit
 

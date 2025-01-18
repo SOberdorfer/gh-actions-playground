@@ -45,7 +45,7 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     uses: ./.github/workflows/rwf_build.yml
     with:
-      artifact-name: my-cool-app
+      artifact-name: gh-actions-playground
       artifact-version: ${{ needs.artifact-version.outputs.package }}
       environment: ${{ inputs.environment }}
     secrets: inherit
