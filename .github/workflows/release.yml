@@ -10,7 +10,7 @@ on:
     inputs:
       environment:
         description: 'Deploy environment'
-        default: 'test'
+        default: test
         type: environment
         required: true
   push:
