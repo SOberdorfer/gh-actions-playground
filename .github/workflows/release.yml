@@ -1,5 +1,4 @@
 name: On-Release
-run-name: 🚀 ${{ github.actor }} is releasing ${{ inputs.environment }}
 on:
   workflow_dispatch:
     inputs:
@@ -19,8 +18,8 @@ permissions:
   id-token: write
   contents: read
 
+run-name: 🚀 ${{ github.actor }} is releasing ${{ inputs.environment }}
 jobs:
-
   artifact-version:
     runs-on: ubuntu-latest
     outputs:
