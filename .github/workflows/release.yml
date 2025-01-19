@@ -1,11 +1,6 @@
 name: On-Release
-run-name: 🚀 ${{ github.actor }} is releasing ${{ inputs.environment == '' ? 'test' : inputs.environment }}
+run-name: 🚀 ${{ github.actor }} is releasing ${{ inputs.environment }}
 on:
-  workflow_call:
-    inputs:
-      environment:
-        type: string
-        required: true
   workflow_dispatch:
     inputs:
       environment:
