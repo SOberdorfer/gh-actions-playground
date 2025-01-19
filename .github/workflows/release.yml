@@ -1,5 +1,5 @@
 name: On-Release
-run-name: 🚀 ${{ github.actor }} is releasing ${{ inputs.environment }}
+run-name: 🚀 ${{ github.actor }} is releasing ${{ inputs.environment == '' ? 'test' : inputs.environment }}
 on:
   workflow_call:
     inputs:
