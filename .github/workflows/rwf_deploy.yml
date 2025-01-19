@@ -1,5 +1,5 @@
 name: 🚀 Deploy
-
+run-name: 🤖 ${{ github.actor }} is releasing ${{ inputs.environment }}
 on:
   workflow_call:
     inputs:
