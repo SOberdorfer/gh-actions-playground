@@ -2,8 +2,6 @@ name: On-Pull-Request
 run-name: 🤖 ${{ github.actor }} is validating PR
 on:
   pull_request:
-    branches:
-      - master
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
