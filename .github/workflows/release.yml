@@ -22,8 +22,6 @@ permissions:
 jobs:
   artifact-version:
     runs-on: ubuntu-latest
-    outputs:
-      package: ${{ steps.package.artifact-version }}
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
