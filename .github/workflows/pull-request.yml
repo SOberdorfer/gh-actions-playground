@@ -30,6 +30,7 @@ jobs:
 
   artifact-build:
     uses: ./.github/workflows/rwf_build.yml
+    needs: [ artifact-version ]
     with:
       environment: test
       artifact-name: gh-actions-playground
