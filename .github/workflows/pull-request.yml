@@ -1,7 +1,7 @@
 name: On-Pull-Request
 run-name: 🤖 ${{ github.actor }} is validating PR
 on:
-  push:
+  pull_request:
     branches:
       - feature/*
 
