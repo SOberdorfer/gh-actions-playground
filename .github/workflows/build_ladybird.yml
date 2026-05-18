@@ -52,6 +52,7 @@ jobs:
           libgl1-mesa-dev \
           libmimalloc-dev \
           libtool \
+          mesa-common-dev \
           nasm \
           ninja-build \
           pkg-config \
