@@ -14,7 +14,7 @@ on:
         type: string
 
 jobs:
-  pr-merge-check:
+  build:
     environment: ${{ inputs.enviroment }}
     runs-on: ubuntu-latest
     concurrency:
@@ -23,13 +23,13 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: 📥 Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
       - name: 🛠️ Setup Node 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
           cache: 'npm'

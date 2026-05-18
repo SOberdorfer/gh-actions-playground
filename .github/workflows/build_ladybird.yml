@@ -1,0 +1,88 @@
+name: Build Ladybird
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Build Ladybird'
+        default: test
+        type: environment
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  artifact-version:
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.package.outputs.artifact-version }}
+    steps:
+      - name: 📦 Retrieve Ladybird HEAD hash
+        id: package
+        run: |
+          ARTIFACT_VERSION=$(git ls-remote https://github.com/LadybirdBrowser/ladybird.git HEAD | cut -c1-7)
+          echo "📝 Retrieved version: $ARTIFACT_VERSION" >> $GITHUB_STEP_SUMMARY
+          echo "artifact-version=${ARTIFACT_VERSION}-" >> $GITHUB_OUTPUT
+
+  build:
+    runs-on: ubuntu-latest
+    needs: artifact-version
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: 📥 Clone Ladybird
+        run: |
+          git clone --depth=1 https://github.com/LadybirdBrowser/ladybird.git ${{ github.workspace }}/ladybird
+
+      - name: 🔧 Install dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            cmake \
+            ninja-build \
+            clang \
+            libgl1-mesa-dev \
+            libpulse-dev \
+            libssl-dev \
+            libx11-dev \
+            libxkbcommon-x11-dev \
+            qt6-base-dev \
+            qt6-tools-dev \
+            qt6-multimedia-dev \
+            libavcodec-dev \
+            libavformat-dev \
+            libavutil-dev \
+            libswresample-dev \
+            libswscale-dev
+
+      - name: 🏗️ Configure
+        working-directory: ${{ github.workspace }}/ladybird
+        run: |
+          cmake -B build \
+            -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_C_COMPILER=clang \
+            -DCMAKE_CXX_COMPILER=clang++
+
+      - name: ⚙️ Build
+        working-directory: ${{ github.workspace }}/ladybird
+        run: cmake --build build -j$(nproc)
+
+      - name: 📦 Stage artifact
+        run: |
+          mkdir -p dist
+          cp ${{ github.workspace }}/ladybird/build/bin/Ladybird lb/ladybird_x86_linux
+          echo "✅ Binary size: $(du -sh dist/ladybird_x86_linux | cut -f1)" >> $GITHUB_STEP_SUMMARY
+
+      - name: ⬆️ Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ladybird_${{ needs.artifact-version.outputs.package }}
+          path: linux_x86
+          retention-days: 30
+          if-no-files-found: error
