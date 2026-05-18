@@ -48,6 +48,7 @@ jobs:
           git \
           libdrm-dev \
           libgl1-mesa-dev \
+          libmimalloc-dev \
           libtool \
           nasm \
           ninja-build \
@@ -72,8 +73,7 @@ jobs:
             -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER=clang \
-            -DCMAKE_CXX_COMPILER=clang++ \
-            -DENABLE_SYSTEM_MIMALLOC=OFF
+            -DCMAKE_CXX_COMPILER=clang++
       - name: ⚙️ Build
         working-directory: ${{ github.workspace }}/ladybird
         run: cmake --build build -j$(nproc)
