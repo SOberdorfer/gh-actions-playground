@@ -77,17 +77,15 @@ jobs:
       - name: 📦 Bootstrap vcpkg
         working-directory: ${{ github.workspace }}/ladybird
         run: |
-          cmake -DLADYBIRD_USE_VCPKG=ON \
-                -P "${{ github.workspace }}/ladybird/cmake/Bootstrap.cmake"
+          python3 Meta/Utils/build_vcpkg.py
       - name: 🏗️ Configure
         working-directory: ${{ github.workspace }}/ladybird
         run: |
           cmake -B build \
             -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
+            --preset Release \
             -DCMAKE_C_COMPILER=clang \
-            -DCMAKE_CXX_COMPILER=clang++ \
-            -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/ladybird/vcpkg/scripts/buildsystems/vcpkg.cmake
+            -DCMAKE_CXX_COMPILER=clang++
       - name: ⚙️ Build
         working-directory: ${{ github.workspace }}/ladybird
         run: cmake --build build -j$(nproc)
