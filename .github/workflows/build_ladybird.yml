@@ -74,21 +74,21 @@ jobs:
           script: |
             core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
             core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
-      - name: 📦 Bootstrap vcpkg
-        working-directory: ${{ github.workspace }}/ladybird
-        run: |
-          python3 Meta/Utils/build_vcpkg.py
-      - name: 🏗️ Configure
-        working-directory: ${{ github.workspace }}/ladybird
-        run: |
-          cmake -B build \
-            -G Ninja \
-            --preset Release \
-            -DCMAKE_C_COMPILER=clang \
-            -DCMAKE_CXX_COMPILER=clang++
+      # - name: 📦 Bootstrap vcpkg
+      #   working-directory: ${{ github.workspace }}/ladybird
+      #   run: |
+      #     python3 Meta/Utils/build_vcpkg.py
+      # - name: 🏗️ Configure
+      #   working-directory: ${{ github.workspace }}/ladybird
+      #   run: |
+      #     cmake -B build \
+      #       -G Ninja \
+      #       --preset Release \
+      #       -DCMAKE_C_COMPILER=clang \
+      #       -DCMAKE_CXX_COMPILER=clang++
       - name: ⚙️ Build
         working-directory: ${{ github.workspace }}/ladybird
-        run: cmake --build build -j$(nproc)
+        run: ./${{ github.workspace }}/Meta/ladybird.py build --gui=Qt
       - name: 📦 Stage artifact
         run: |
           mkdir -p lb
