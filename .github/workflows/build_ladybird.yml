@@ -95,7 +95,7 @@ jobs:
           cp ${{ github.workspace }}/ladybird/build/bin/Ladybird lb/ladybird_x86_linux
           echo "✅ Binary size: $(du -sh lb/ladybird_x86_linux | cut -f1)" >> $GITHUB_STEP_SUMMARY
       - name: ⬆️ Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ladybird_${{ needs.artifact-version.outputs.package }}
           path: lb
