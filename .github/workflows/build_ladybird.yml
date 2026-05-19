@@ -88,7 +88,7 @@ jobs:
       #       -DCMAKE_CXX_COMPILER=clang++
       - name: ⚙️ Build
         working-directory: ${{ github.workspace }}/ladybird
-        run: ./${{ github.workspace }}/Meta/ladybird.py build --gui=Qt
+        run: python ${{ github.workspace }}/Meta/ladybird.py build --gui=Qt
       - name: 📦 Stage artifact
         run: |
           mkdir -p lb
