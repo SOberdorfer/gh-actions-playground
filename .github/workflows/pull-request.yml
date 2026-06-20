@@ -1,9 +1,7 @@
 name: On-Pull-Request
 run-name: 🤖 ${{ github.actor }} is validating PR
 on:
-  push:
-    branches:
-      - feature/*
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.sha }}
@@ -21,17 +19,18 @@ jobs:
       - name: 📦 Retrieve Artifact-version from package
         id: package
         run: |
-          BASE_REF=$(echo "${{ github.base_ref }}" | cut -d'/' -f2-)
-          if [ -z "$BASE_REF" ]; then
-            BASE_REF="$((minutes=$(date +%s)/60))"
+          HEAD_REF=$(echo "${{ github.head_ref }}" | cut -d'/' -f2-)
+          if [ -z "$HEAD_REF" ]; then
+            HEAD_REF="$((minutes=$(date +%s)/60))"
           fi
-          ARTIFACT_VERSION=$(jq -r '.version' package.json)-$BASE_REF
+          ARTIFACT_VERSION=$(jq -r '.version' package.json)-$HEAD_REF
 
           echo "📝 Retrieved version: $ARTIFACT_VERSION" >> $GITHUB_STEP_SUMMARY
           echo "artifact-version=${ARTIFACT_VERSION}-" >> $GITHUB_OUTPUT
 
   artifact-build:
     uses: ./.github/workflows/rwf_build.yml
+    needs: [ artifact-version ]
     with:
       environment: test
       artifact-name: gh-actions-playground
